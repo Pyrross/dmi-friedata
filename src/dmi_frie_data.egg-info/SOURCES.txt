@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/dmi_frie_data/__init__.py
+src/dmi_frie_data/client.py
+src/dmi_frie_data/http.py
+src/dmi_frie_data/models.py
+src/dmi_frie_data/query.py
+src/dmi_frie_data/services.py
+src/dmi_frie_data.egg-info/PKG-INFO
+src/dmi_frie_data.egg-info/SOURCES.txt
+src/dmi_frie_data.egg-info/dependency_links.txt
+src/dmi_frie_data.egg-info/requires.txt
+src/dmi_frie_data.egg-info/top_level.txt
+tests/test_client.py
