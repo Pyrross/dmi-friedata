@@ -41,6 +41,10 @@ class Feature:
     assets: dict[str, Asset] = field(default_factory=dict)
     bbox: list[float] | None = None
     stac_version: str | None = None
+    # Extracted HDF5 group attribute dictionaries (populated when HDF5 is loaded)
+    how_attrs: dict[str, Any] | None = None
+    what_attrs: dict[str, Any] | None = None
+    where_attrs: dict[str, Any] | None = None
 
     def get_asset(self, name: str) -> Asset | None:
         return self.assets.get(name)
@@ -96,6 +100,28 @@ class Feature:
 
         dataset_path = dataset_name or "dataset1/data1/data"
         with self.load_hdf5(path=path, http_client=http_client) as handle:
+            # extract common group attributes if present so the Feature carries
+            # the HDF5 metadata as plain dicts
+            for grp_name, attr_field in (("how", "how_attrs"), ("what", "what_attrs"), ("where", "where_attrs")):
+                if grp_name in handle:
+                    attrs = {}
+                    for k, v in handle[grp_name].attrs.items():
+                        # normalize bytes and numpy types to Python primitives
+                        if isinstance(v, (bytes, bytearray)):
+                            try:
+                                val = v.decode()
+                            except Exception:
+                                val = v
+                        elif hasattr(v, "tolist"):
+                            try:
+                                val = v.tolist()
+                            except Exception:
+                                val = v
+                        else:
+                            val = v
+                        attrs[k] = val
+                    setattr(self, attr_field, attrs)
+
             dataset = handle.get(dataset_path)
             if dataset is None:
                 candidates = ["data", "dataset1/data1/data", "dataset1/data1/values"]
