@@ -2,7 +2,7 @@ Metadata-Version: 2.4
 Name: dmi-frie-data
 Version: 0.1.0
 Summary: Python client library for DMI Frie Data open APIs
-Author: OpenAI
+Author: Sebastian Winkelmann
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 Requires-Dist: httpx>=0.28
